@@ -13,60 +13,84 @@
             width: 100%;
             overflow: hidden;
             background-color: #000;
-            font-family: -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         .fullscreen-bg {
             height: 100dvh;
             width: 100vw;
+            display: flex;
+            
+            /* Positions the button at the bottom right */
+            justify-content: flex-end;
+            align-items: flex-end;
+            
             background-position: center;
             background-repeat: no-repeat;
             background-size: contain; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 10vh;
             
-            /* High-quality rendering properties */
+            box-sizing: border-box;
+            padding: 30px; 
+            
             image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
         }
 
         .discord-btn {
-            padding: 16px 32px;
+            padding: 14px 28px;
             background-color: #5865F2;
             color: white;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
             transition: all 0.2s ease-in-out;
             box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             border: 1px solid rgba(255,255,255,0.1);
+            z-index: 10;
         }
 
         .discord-btn:hover {
             background-color: #4752C4;
-            transform: scale(1.05);
+            transform: translateY(-2px);
         }
 
-        /* PC Scaling - keeps the image from stretching too wide */
-        @media (min-width: 1024px) {
-            .fullscreen-bg {
-                background-size: contain; 
-            }
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            z-index: 100;
+            transition: all 0.2s;
         }
 
-        /* Mobile Scaling - ensures the image fits the narrow screen */
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
         @media (max-width: 767px) {
             .fullscreen-bg {
-                background-size: contain;
-                padding-bottom: 20vh;
+                padding: 20px;
+                /* Keeps button at bottom right even on mobile */
+                justify-content: flex-end; 
+            }
+            .discord-btn {
+                font-size: 0.9rem;
+                padding: 12px 20px;
             }
         }
     </style>
 </head>
 <body>
+
+    <button class="lang-toggle" id="lang-btn">EN / 中文</button>
 
     <div class="fullscreen-bg" id="bg-container">
         <a href="https://discord.its-my-go.com" class="discord-btn">Join Discord</a>
@@ -74,17 +98,24 @@
 
     <script>
         const bgContainer = document.getElementById('bg-container');
-        const userLang = navigator.language || navigator.userLanguage;
-
-        // Path to your local files
+        const langBtn = document.getElementById('lang-btn');
+        
         const imgZh = "img/itsmygocn1.png"; 
         const imgDefault = "img/itsmygo.png";
 
-        if (userLang.startsWith('zh')) {
-            bgContainer.style.backgroundImage = `url('${imgZh}')`;
-        } else {
-            bgContainer.style.backgroundImage = `url('${imgDefault}')`;
+        let currentIsZh = (navigator.language || navigator.userLanguage).startsWith('zh');
+
+        function updateBackground(isZh) {
+            bgContainer.style.backgroundImage = `url('${isZh ? imgZh : imgDefault}')`;
+            langBtn.textContent = isZh ? "English" : "中文";
         }
+
+        langBtn.addEventListener('click', () => {
+            currentIsZh = !currentIsZh;
+            updateBackground(currentIsZh);
+        });
+
+        updateBackground(currentIsZh);
     </script>
 </body>
 </html>
