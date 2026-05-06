@@ -10,21 +10,81 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             overflow: hidden;
+            background-color: #000;
+            font-family: -apple-system, sans-serif;
         }
 
         .fullscreen-bg {
-        background-image: url(img/itsmygo.png);
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain; 
-        background-color: black;
-        height: 100dvh;
-        width: 100vw;
-}
+            height: 100dvh;
+            width: 100vw;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 10vh;
+            
+            /* High-quality rendering properties */
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .discord-btn {
+            padding: 16px 32px;
+            background-color: #5865F2;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .discord-btn:hover {
+            background-color: #4752C4;
+            transform: scale(1.05);
+        }
+
+        /* PC Scaling - keeps the image from stretching too wide */
+        @media (min-width: 1024px) {
+            .fullscreen-bg {
+                background-size: contain; 
+            }
+        }
+
+        /* Mobile Scaling - ensures the image fits the narrow screen */
+        @media (max-width: 767px) {
+            .fullscreen-bg {
+                background-size: contain;
+                padding-bottom: 20vh;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="fullscreen-bg"></div>
+
+    <div class="fullscreen-bg" id="bg-container">
+        <a href="https://discord.its-my-go.com" class="discord-btn">Join Discord</a>
+    </div>
+
+    <script>
+        const bgContainer = document.getElementById('bg-container');
+        const userLang = navigator.language || navigator.userLanguage;
+
+        // Path to your local files
+        const imgZh = "img/itsmygocn1.png"; 
+        const imgDefault = "img/itsmygo.png";
+
+        if (userLang.startsWith('zh')) {
+            bgContainer.style.backgroundImage = `url('${imgZh}')`;
+        } else {
+            bgContainer.style.backgroundImage = `url('${imgDefault}')`;
+        }
+    </script>
 </body>
 </html>
